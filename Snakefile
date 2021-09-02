@@ -42,8 +42,9 @@ LOGDIR = config['logdir']
 DATA = config['samples']
 CHR_LIST = config['chr_list']
 
+
 #### Load rules ####
-include: 'rules/vep_annonation.smk'
+include: 'rules/vep_annotation.smk'
 
 
 rule all:

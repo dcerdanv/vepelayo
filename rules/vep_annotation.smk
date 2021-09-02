@@ -11,7 +11,7 @@ rule remove_vcf_header:
     log:
         f"{LOGDIR}/remove_vcf_header/{{sample}}.log"
     priority: 1
-    shell: "sed '/^#/d' > {output.vcf_no_header}"
+    shell: "sed '/^#/d' {input.vcf} > {output.vcf_no_header}"
 
 
 # TODO ¿Revisar longitud de los sufijos. Cuantos pedazos va a haber para el primer cromosoma?
@@ -62,8 +62,8 @@ rule annotate:
         mem=get_resource('annotate', 'mem'),
         walltime=get_resource('annotate', 'walltime')
     params:
-    #conda:
-    #    "envs/vep_annotation.yaml"
+    conda:
+        "../envs/vep_annotation.yaml"
     log:
         f"{LOGDIR}/annotate/{{sample}}/{{sample}}.part-{{part}}.log"
     priority: 4
