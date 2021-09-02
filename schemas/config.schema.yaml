@@ -1,0 +1,79 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+
+description: snakemake configuration file
+
+type: object
+
+properties:
+    samples:
+        type: string
+    outdir: 
+        type: string
+    logdir: 
+        type: string
+    chr_list:
+        type: array
+
+
+    parameters:
+        properties:
+            paste_header:
+                type: object
+                properties:
+                    header_vcf:
+                        type: string
+
+            split_chr:
+                type: object
+                properties:
+                    num_lines:
+                        type: string
+
+            join_files:
+                type: object
+                properties:
+                    header_txt:
+                        type: string
+
+    
+    resources:
+        properties:
+            default:
+                type: object
+                properties:
+                    threads:
+                        type: integer
+                    mem:
+                        type: integer
+                    walltime:
+                        type: integer
+
+            remove_vcf_header:
+                type: object
+                properties:
+                    threads:
+                        type: integer
+                    mem:
+                        type: integer
+                    walltime:
+                        type: integer
+
+            split_chr:
+                type: object
+                properties:
+                    threads:
+                        type: integer
+                    mem:
+                        type: integer
+                    walltime:
+                        type: integer
+
+            annotate:
+                type: object
+                properties:
+                    threads:
+                        type: integer
+                    mem:
+                        type: integer
+                    walltime:
+                        type: integer

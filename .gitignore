@@ -1,0 +1,6 @@
+.snakemake
+log
+data
+results
+logs
+config.yaml

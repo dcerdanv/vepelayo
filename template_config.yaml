@@ -1,0 +1,44 @@
+# path or the data directory
+# Here there must be chr in format chr{number}.ready.vcf.gz
+samples: 'data'
+
+# path to the results directory
+outdir: 'results'
+
+# path to the logs directory
+logdir: 'logs'
+
+# Chrs we wanna run
+chr_list: ["chr1", "chr2", "chr3"]
+
+parameters:
+    paste_header:
+        header_vcf: "resources/chr.header.txt"
+    
+    split_chr:
+        num_lines: "30000"
+
+    join_files:
+        header_txt: "resources/txt.header.txt"
+
+
+resources:
+    default:
+        threads: 1
+        mem:  4096
+        walltime: 40
+
+    remove_vcf_header:
+        threads: 1
+        mem:  12288
+        walltime: 80
+    
+    split_chr:
+        threads: 1
+        mem:  4096
+        walltime: 60
+
+    annotate:
+        threads: 8
+        mem:  24576
+        walltime: 120
