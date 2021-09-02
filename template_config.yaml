@@ -1,5 +1,5 @@
 # path or the data directory
-# Here there must be chr in format chr{number}.ready.vcf.gz
+# Here there must be chr in format chr{number}.annovar.vcf
 samples: 'data'
 
 # path to the results directory
