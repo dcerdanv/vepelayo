@@ -82,7 +82,7 @@ rule annotate_variants:
         # csi="annotation.gff.csi", # tabix index
     output:
         calls=temp(f"{OUTDIR}/annotate/{{sample}}/{{sample}}.part-{{part}}"),  # .vcf, .vcf.gz or .bcf
-        stats=f"{OUTDIR}/stats/{{sample}}_variants.html"
+        stats=f"{OUTDIR}/stats/{{sample}}_{{part}}_variants.html"
     threads:
         get_resource('annotate', 'threads')
     resources:
@@ -93,7 +93,7 @@ rule annotate_variants:
         # Plugin args can be added as well, e.g. via an entry "MyPlugin,1,FOO", see docs.
         extra=get_params('annotate','extra')  # optional: extra arguments
     log:
-        "logs/vep/annotate.log"
+        f"{LOGDIR}/annotate/{{sample}}/annotate_{{sample}}_{{part}}.log"
     priority: 4
     wrapper:
         "0.77.0/bio/vep/annotate"
@@ -101,7 +101,7 @@ rule annotate_variants:
 
 rule remove_txt_header:
     input:
-        annotate_part = rules.annotate.output.annotate_part
+        annotate_part = rules.annotate_variants.output.calls
     output:
         txt_no_header = f"{OUTDIR}/annotate_no_header/{{sample}}/{{sample}}.part-{{part}}"
     threads:
@@ -112,7 +112,7 @@ rule remove_txt_header:
     log:
         f"{LOGDIR}/remove_txt_header/{{sample}}/{{sample}}.part-{{part}}.log"
     priority: 10
-    shell: "sed '/^#/d' > {output.txt_no_header}"
+    shell: "sed '/^#/d' {input.annotate_part} > {output.txt_no_header}"
 
 
 def aggregate_input(wildcards):
