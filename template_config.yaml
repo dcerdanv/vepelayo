@@ -8,6 +8,9 @@ outdir: 'results'
 # path to the logs directory
 logdir: 'logs'
 
+# path to vep resources directory
+logdir: 'resources'
+
 # Chrs we wanna run
 chr_list: ["chr1", "chr2", "chr3"]
 
@@ -21,6 +24,12 @@ parameters:
     join_files:
         header_txt: "resources/txt.header.txt"
 
+    vep_cache:
+        species: "saccharomyces_cerevisiae"
+        build: "R64-1-1"
+        release: "98"
+        extra: "-- everything"
+        
 
 resources:
     default:

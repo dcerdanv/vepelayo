@@ -41,10 +41,11 @@ OUTDIR = config['outdir']
 LOGDIR = config['logdir']
 DATA = config['samples']
 CHR_LIST = config['chr_list']
-
+VEP_CACHE = config['vep_cache']
 
 #### Load rules ####
 include: 'rules/vep_annotation.smk'
+include: 'rules/vep_cache.smk'
 
 
 rule all:
