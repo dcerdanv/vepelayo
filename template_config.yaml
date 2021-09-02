@@ -24,11 +24,13 @@ parameters:
     join_files:
         header_txt: "resources/txt.header.txt"
 
-    vep_cache:
-        species: "saccharomyces_cerevisiae"
-        build: "R64-1-1"
-        release: "98"
-        extra: "-- everything"
+    # List of available anotations can be found in http://ftp.ensembl.org/pub/current_variation/indexed_vep_cache/
+    # I guess that 'species', 'build', and 'release' are mandatory
+    annotate:
+        species: "homo_sapiens"
+        build: "GRCh37"
+        release: "104"
+        extra: "--everything --force_overwrite --af_gnomad --tab --per_gene --canonical --verbose"
         
 
 resources:
