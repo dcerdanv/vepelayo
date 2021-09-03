@@ -1,6 +1,9 @@
+name: vep_annotation
 channels:
   - conda-forge
   - bioconda
+  - r
+  - defaults
 dependencies:
   - ensembl-vep
   

@@ -9,7 +9,7 @@ outdir: 'results'
 logdir: 'logs'
 
 # path to vep resources directory
-logdir: 'resources'
+vep_cache: 'cache'
 
 # Chrs we wanna run
 chr_list: ["chr1", "chr2", "chr3"]
@@ -24,12 +24,13 @@ parameters:
     join_files:
         header_txt: "resources/txt.header.txt"
 
-    # List of available anotations can be found in http://ftp.ensembl.org/pub/current_variation/indexed_vep_cache/
-    # I guess that 'species', 'build', and 'release' are mandatory
     annotate:
+        # List of available anotations can be found in http://ftp.ensembl.org/pub/current_variation/indexed_vep_cache/
+        # I guess that 'species', 'build', and 'release' are mandatory
         species: "homo_sapiens"
         build: "GRCh37"
         release: "104"
+        # Listo of vep options is in: https://www.ensembl.org/info/docs/tools/vep/script/vep_options.html
         extra: "--everything --force_overwrite --af_gnomad --tab --per_gene --canonical --verbose"
         
 

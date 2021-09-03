@@ -37,7 +37,7 @@ rule paste_header:
     input:
         split_file = f"{OUTDIR}/split/{{sample}}/{{sample}}.part-{{part}}",
     output:
-        headed_file = temp(f"{OUTDIR}/headed/{{sample}}/{{sample}}.part-{{part}}")
+        headed_file = temp(f"{OUTDIR}/headed/{{sample}}/{{sample}}.part-{{part}}.vcf")
     threads:
         get_resource('default', 'threads')
     resources:
@@ -51,37 +51,17 @@ rule paste_header:
     shell: 'cat {params.header} {input.split_file} > {output.headed_file}'
 
 
-#rule annotate:
-#    input:
-#        headed_file = rules.paste_header.output.headed_file
-#    output:
-#        annotate_part = temp(f"{OUTDIR}/annotate/{{sample}}/{{sample}}.part-{{part}}")
-#    threads:
-#        get_resource('annotate', 'threads')
-#    resources:
-#        mem=get_resource('annotate', 'mem'),
-#        walltime=get_resource('annotate', 'walltime')
-#    params:
-#    conda:
-#        "../envs/vep_annotation.yaml"
-#    log:
-#        f"{LOGDIR}/annotate/{{sample}}/{{sample}}.part-{{part}}.log"
-#    priority: 4
-#    shell: "vep --cache -i {input.headed_file} -e -o {output.annotate_part} --force_overwrite \
-#    --assembly GRCh37 --af_gnomad --no_stats --tab --offline --verbose --per_gene --canonical"
-
-
 rule annotate_variants:
     input:
         calls=rules.paste_header.output.headed_file,  # .vcf, .vcf.gz or .bcf
-        cache=f"{VEP_CACHE}", # can be omitted if fasta and gff are specified
+        cache=directory(f"{VEP_CACHE}"), # can be omitted if fasta and gff are specified
         # optionally add reference genome fasta
         # fasta="genome.fasta",
         # fai="genome.fasta.fai", # fasta index
         # gff="annotation.gff",
         # csi="annotation.gff.csi", # tabix index
     output:
-        calls=temp(f"{OUTDIR}/annotate/{{sample}}/{{sample}}.part-{{part}}"),  # .vcf, .vcf.gz or .bcf
+        calls=f"{OUTDIR}/annotate/{{sample}}/{{sample}}.part-{{part}}",  # .vcf, .vcf.gz or .bcf
         stats=f"{OUTDIR}/stats/{{sample}}_{{part}}_variants.html"
     threads:
         get_resource('annotate', 'threads')
@@ -92,11 +72,13 @@ rule annotate_variants:
         # Pass a list of plugins to use, see https://www.ensembl.org/info/docs/tools/vep/script/vep_plugins.html
         # Plugin args can be added as well, e.g. via an entry "MyPlugin,1,FOO", see docs.
         extra=get_params('annotate','extra')  # optional: extra arguments
+    conda:
+        cd "../envs/vep_annotation.yaml"
     log:
         f"{LOGDIR}/annotate/{{sample}}/annotate_{{sample}}_{{part}}.log"
     priority: 4
-    wrapper:
-        "0.77.0/bio/vep/annotate"
+    script:
+        "../scripts/vep.py"
 
 
 rule remove_txt_header:
