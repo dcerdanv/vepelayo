@@ -73,7 +73,7 @@ rule annotate_variants:
         # Plugin args can be added as well, e.g. via an entry "MyPlugin,1,FOO", see docs.
         extra=get_params('annotate','extra')  # optional: extra arguments
     conda:
-        cd "../envs/vep_annotation.yaml"
+        "../envs/vep_annotation.yaml"
     log:
         f"{LOGDIR}/annotate/{{sample}}/annotate_{{sample}}_{{part}}.log"
     priority: 4
