@@ -14,15 +14,17 @@ vep_cache: 'cache'
 # Chrs we wanna run
 chr_list: ["chr1", "chr2", "chr3"]
 
+
 parameters:
     paste_header:
         header_vcf: "resources/chr.header.txt"
     
     split_chr:
         num_lines: "30000"
-
-    join_files:
-        header_txt: "resources/txt.header.txt"
+    
+    filter_vcf:
+        # Remove splitted vcf lines whose length is longer that this number.
+        id_length: "1000"
 
     annotate:
         # List of available anotations can be found in http://ftp.ensembl.org/pub/current_variation/indexed_vep_cache/
@@ -32,6 +34,9 @@ parameters:
         release: "104"
         # Listo of vep options is in: https://www.ensembl.org/info/docs/tools/vep/script/vep_options.html
         extra: "--everything --force_overwrite --af_gnomad --tab --per_gene --canonical --verbose"
+
+    join_files:
+        header_txt: "resources/txt.header.txt"
         
 
 resources:

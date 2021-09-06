@@ -28,6 +28,24 @@ properties:
                 properties:
                     num_lines:
                         type: string
+            
+            filter_vcf:
+                type: object
+                properties:
+                    id_length: 
+                        type: string
+
+            annotate:
+                type: object
+                properties:
+                    species:
+                        type: string
+                     build:
+                        type: string
+                    release:
+                        type: string
+                    extra:
+                        type: string
 
             join_files:
                 type: object

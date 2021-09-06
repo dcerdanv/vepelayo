@@ -33,9 +33,28 @@ checkpoint split_chr:
     shell: 'mkdir {output.split_folder}; split -l {params.split_size} "{input.vcf_no_header}" "{output.split_folder}/{wildcards.sample}.part-"'
 
 
-rule paste_header:
+# Check that the ID column is no longer than 1000 char to aboid problems with vep
+rule filter_vcf:
     input:
         split_file = f"{OUTDIR}/split/{{sample}}/{{sample}}.part-{{part}}",
+    output:
+        filter_file = temp(f"{OUTDIR}/filter/{{sample}}/{{sample}}.part-{{part}}")
+    threads:
+        get_resource('default', 'threads')
+    resources:
+        mem=get_resource('default', 'mem'),
+        walltime=get_resource('default', 'walltime')
+    params:
+        id_length = get_params('filter_vcf', 'id_length')
+    log:
+        f"{LOGDIR}/split_chr/{{sample}}.log"
+    priority: 2
+    shell: "awk -F: 'length($3)<={params.id_length}' file"
+
+
+rule paste_header:
+    input:
+        filter_file = rules.filter_vcf.output.filter_file,
     output:
         headed_file = temp(f"{OUTDIR}/headed/{{sample}}/{{sample}}.part-{{part}}.vcf")
     threads:
