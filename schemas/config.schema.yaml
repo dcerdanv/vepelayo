@@ -40,7 +40,7 @@ properties:
                 properties:
                     species:
                         type: string
-                     build:
+                    build:
                         type: string
                     release:
                         type: string

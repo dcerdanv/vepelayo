@@ -47,9 +47,9 @@ rule filter_vcf:
     params:
         id_length = get_params('filter_vcf', 'id_length')
     log:
-        f"{LOGDIR}/split_chr/{{sample}}.log"
+        f"{LOGDIR}/split_chr/{{sample}}-{{part}}.log"
     priority: 2
-    shell: "awk -F: 'length($3)<={params.id_length}' file"
+    shell: "awk -F'\t' 'length($3)<={params.id_length}' {input.split_file} > {output.filter_file}"
 
 
 rule paste_header:
@@ -67,13 +67,13 @@ rule paste_header:
     log:
         f"{LOGDIR}/paste_header/{{sample}}/{{sample}}.part-{{part}}.log"
     priority: 3
-    shell: 'cat {params.header} {input.split_file} > {output.headed_file}'
+    shell: 'cat {params.header} {input.filter_file} > {output.headed_file}'
 
 
 rule annotate_variants:
     input:
         calls=rules.paste_header.output.headed_file,  # .vcf, .vcf.gz or .bcf
-        cache=directory(f"{VEP_CACHE}"), # can be omitted if fasta and gff are specified
+        cache=f"{VEP_CACHE}", # can be omitted if fasta and gff are specified
         # optionally add reference genome fasta
         # fasta="genome.fasta",
         # fai="genome.fasta.fai", # fasta index
